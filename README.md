@@ -1,2 +1,3 @@
 # java-explore-with-me
-Template repository for ExploreWithMe project.
+Ссылка на ветку develop 
+https://github.com/Anton-Morozov-Java-3-2/java-explore-with-me/pull/1
