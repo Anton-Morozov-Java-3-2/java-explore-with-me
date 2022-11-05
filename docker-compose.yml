@@ -30,8 +30,8 @@ services:
       - stats-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
-      - SPRING_DATASOURCE_USERNAME=develop
-      - SPRING_DATASOURCE_PASSWORD=postgres
+      - POSTGRES_USER=develop
+      - POSTGRES_PASSWORD=postgres
 
   ewm-service:
     build: ewm-service/.
@@ -43,6 +43,6 @@ services:
       - ewm-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-db
-      - SPRING_DATASOURCE_USERNAME=develop
-      - SPRING_DATASOURCE_PASSWORD=postgres
+      - POSTGRES_USER=develop
+      - POSTGRES_PASSWORD=postgres
       - STATS-SERVER_URL=http://stats-server:9090
