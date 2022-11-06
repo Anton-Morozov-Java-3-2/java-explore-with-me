@@ -26,16 +26,19 @@ class CategoryServiceTest {
 
     CategoryService categoryService;
 
+    CategoryMapper categoryMapper = new CategoryMapperImpl();
+
     private MockitoSession session;
 
     private static  Category category = new Category(1L, "test");
+
     private static NewCategoryDto newCategoryDto = new NewCategoryDto("test");
     private static  CategoryDto categoryDto = new CategoryDto(1L, "test");
 
     @BeforeEach
     void setUp() {
         session = Mockito.mockitoSession().initMocks(this).startMocking();
-        categoryService = new CategoryServiceImpl(categoryRepository);
+        categoryService = new CategoryServiceImpl(categoryRepository, categoryMapper);
     }
 
     @AfterEach

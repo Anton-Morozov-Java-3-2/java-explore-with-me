@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.ewm.category.Category;
 import ru.practicum.ewm.event.dto.*;
-import ru.practicum.ewm.request.RequestServiceImpl;
+import ru.practicum.ewm.request.RequestService;
 import ru.practicum.ewm.user.User;
 
 import java.nio.charset.StandardCharsets;
@@ -32,10 +32,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PrivateEventControllerTest {
 
     @MockBean
-    private EventServiceImpl eventService;
+    private EventService eventService;
 
     @MockBean
-    private RequestServiceImpl requestService;
+    private RequestService requestService;
+
+    private final EventMapper eventMapper = new EventMapperImpl();
 
     @Autowired
     private final ObjectMapper mapper = new ObjectMapper();
@@ -135,8 +137,8 @@ class PrivateEventControllerTest {
     @BeforeEach
     void setUp() {
         event = getEvent();
-        eventFullDto = EventMapper.INSTANCE.toEventFullDto(event);
-        eventShortDto = EventMapper.INSTANCE.toEventShortDto(event);
+        eventFullDto = eventMapper.toEventFullDto(event);
+        eventShortDto = eventMapper.toEventShortDto(event);
         updateEventRequest = getUpdateEventRequest();
         newEventDto = getNewEventDto();
     }

@@ -24,20 +24,6 @@ public class Category {
     public String toString() {
         return String.format("Category = {id: %d, name: %s}", id, name);
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return  true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Category category = (Category) o;
-        return this.getId().equals(category.getId())
-                && this.getName().equals(category.getName());
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode() + name.hashCode();
-    }
 }
 
 

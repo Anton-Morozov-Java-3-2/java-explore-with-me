@@ -27,6 +27,8 @@ public class CompilationServiceImpl implements CompilationService {
 
     private final EventRepository eventRepository;
 
+    private final CompilationMapper compilationMapper;
+
     @Override
     public List<CompilationDto> getAll(Boolean pinned, Integer from, Integer size) {
         PageRequest pageRequest = PageRequest.of(from, size);
@@ -34,7 +36,7 @@ public class CompilationServiceImpl implements CompilationService {
         Page<Compilation> compilations = (pinned == null ? compilationRepository.findAll(pageRequest) :
                 compilationRepository.findAllByPinned(pinned, pageRequest));
             log.info("Get all compilations");
-            return compilations.stream().map(CompilationMapper.INSTANCE::toCompilationDto).collect(Collectors.toList());
+            return compilations.stream().map(compilationMapper::toCompilationDto).collect(Collectors.toList());
     }
 
     @Override
@@ -42,16 +44,17 @@ public class CompilationServiceImpl implements CompilationService {
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(() ->
                 new CompilationNotFoundException(CompilationNotFoundException.createMessage(compId)));
         log.info("Get {}", compilation);
-        return CompilationMapper.INSTANCE.toCompilationDto(compilation);
+        return compilationMapper.toCompilationDto(compilation);
     }
 
     @Override
     public CompilationDto create(NewCompilationDto newCompilationDto) throws EventNotFoundException {
-        Compilation compilation = CompilationMapper.INSTANCE.toCompilation(newCompilationDto);
+        Compilation compilation = compilationMapper.toCompilation(newCompilationDto);
         if (compilation.getPinned() == null)
             compilation.setPinned(false);
         Set<Long> eventIds = compilation.getEvents().stream().map(Event::getId).collect(Collectors.toSet());
         Set<Event> events = new HashSet<>();
+
 
         for (Long e : eventIds) {
             events.add(eventRepository.findById(e).orElseThrow(() -> new EventNotFoundException(EventNotFoundException
@@ -61,7 +64,7 @@ public class CompilationServiceImpl implements CompilationService {
         compilation.setEvents(events);
         Compilation newCompilation = compilationRepository.save(compilation);
         log.info("Create {}", newCompilation);
-        return CompilationMapper.INSTANCE.toCompilationDto(newCompilation);
+        return compilationMapper.toCompilationDto(newCompilation);
     }
 
     @Override

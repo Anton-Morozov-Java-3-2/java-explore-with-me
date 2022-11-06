@@ -21,12 +21,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    private final CategoryMapper categoryMapper;
+
     @Override
     public CategoryDto create(NewCategoryDto newCategoryDto) throws CategoryNameNotUniqueException {
         try {
-            Category category = categoryRepository.save(CategoryMapper.INSTANCE.toCategory(newCategoryDto));
+            Category category = categoryRepository.save(categoryMapper.toCategory(newCategoryDto));
             log.info("Create {}", category);
-            return CategoryMapper.INSTANCE.toCategoryDto(category);
+            return categoryMapper.toCategoryDto(category);
         } catch (DataIntegrityViolationException e) {
             throw new CategoryNameNotUniqueException(e.getMessage());
         }
@@ -36,9 +38,9 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto update(CategoryDto categoryDto) throws CategoryNotFoundException, CategoryNameNotUniqueException {
         checkExistCategory(categoryDto.getId());
         try {
-            Category category = categoryRepository.save(CategoryMapper.INSTANCE.toCategory(categoryDto));
+            Category category = categoryRepository.save(categoryMapper.toCategory(categoryDto));
             log.info("Update {}", category);
-            return CategoryMapper.INSTANCE.toCategoryDto(category);
+            return categoryMapper.toCategoryDto(category);
         } catch (DataIntegrityViolationException e) {
             throw new CategoryNameNotUniqueException(e.getMessage());
         }
@@ -55,7 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryDto> getAll(Integer from, Integer size) {
         PageRequest pageRequest = PageRequest.of(from, size);
         List<CategoryDto> list = categoryRepository.findAll(pageRequest).stream()
-                                                    .map(CategoryMapper.INSTANCE::toCategoryDto)
+                                                    .map(categoryMapper::toCategoryDto)
                                                     .collect(Collectors.toList());
         log.info("Get categories page= {}, size= {}", from, size);
         return list;
@@ -66,7 +68,7 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<Category> optionalCategory = categoryRepository.findById((long) categoryId);
         if (optionalCategory.isPresent()) {
             log.info("Get {}", optionalCategory.get());
-            return CategoryMapper.INSTANCE.toCategoryDto(optionalCategory.get());
+            return categoryMapper.toCategoryDto(optionalCategory.get());
         } else {
             throw new CategoryNotFoundException(CategoryNotFoundException.createMessage(categoryId));
         }

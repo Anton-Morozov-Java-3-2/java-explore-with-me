@@ -38,6 +38,8 @@ class PublicEventControllerTest {
     @MockBean
     private StatsClient statsClient;
 
+    private final EventMapper eventMapper = new EventMapperImpl();
+
     @Autowired
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -85,8 +87,8 @@ class PublicEventControllerTest {
     @BeforeEach
     void setUp() {
         event = getEvent();
-        eventFullDto = EventMapper.INSTANCE.toEventFullDto(event);
-        eventShortDto = EventMapper.INSTANCE.toEventShortDto(event);
+        eventFullDto = eventMapper.toEventFullDto(event);
+        eventShortDto = eventMapper.toEventShortDto(event);
     }
 
     @Test

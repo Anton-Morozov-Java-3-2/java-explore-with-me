@@ -48,6 +48,10 @@ public class EventServiceImpl implements EventService {
 
     private final RequestRepository requestRepository;
 
+    private final EventMapper eventMapper;
+
+    private final RequestMapper requestMapper;
+
     @Override
     public List<EventShortDto> getAll(String text,
                                       List<Long> categories,
@@ -87,7 +91,7 @@ public class EventServiceImpl implements EventService {
                             onlyAvailable, pageRequest)));
 
             log.info("Get events {}", events);
-            return events.stream().map(EventMapper.INSTANCE::toEventShortDto).collect(Collectors.toList());
+            return events.stream().map(eventMapper::toEventShortDto).collect(Collectors.toList());
         } catch (DateTimeParseException e) {
             throw new DataTimeFormatException("Format rangeStart: " + start + " and rangeEnd: " + end + " not validate");
         }
@@ -103,7 +107,7 @@ public class EventServiceImpl implements EventService {
         }
 
         log.info("Get {}", event);
-        return EventMapper.INSTANCE.toEventFullDto(event);
+        return eventMapper.toEventFullDto(event);
     }
 
     @Override
@@ -123,7 +127,7 @@ public class EventServiceImpl implements EventService {
 
         List<Event> events = eventRepository.findAllByInitiatorId(userId, pageRequest).toList();
         log.info("Get all events by initiatorId={}", userId);
-        return events.stream().map(EventMapper.INSTANCE::toEventShortDto).collect(Collectors.toList());
+        return events.stream().map(eventMapper::toEventShortDto).collect(Collectors.toList());
     }
 
     @Override
@@ -143,7 +147,7 @@ public class EventServiceImpl implements EventService {
             throw new EventStatusToEditException("Only pending or canceled events can be changed");
         }
 
-        Event toUpdateEvent = EventMapper.INSTANCE.toEvent(updateEventRequest);
+        Event toUpdateEvent = eventMapper.toEvent(updateEventRequest);
 
         if (event.getState().equals(EventState.CANCELED)) {
             toUpdateEvent.setState(EventState.PENDING);
@@ -154,7 +158,7 @@ public class EventServiceImpl implements EventService {
         Event updateEvent = eventRepository.save(event);
 
         log.info("Update {}", updateEvent);
-        return EventMapper.INSTANCE.toEventFullDto(updateEvent);
+        return eventMapper.toEventFullDto(updateEvent);
     }
 
     @Override
@@ -169,7 +173,7 @@ public class EventServiceImpl implements EventService {
 
         setDefaultParametersNewEventDto(newEventDto);
 
-        Event event = EventMapper.INSTANCE.toEvent(newEventDto);
+        Event event = eventMapper.toEvent(newEventDto);
 
         event.setInitiator(initiator);
         event.setConfirmedRequests(0L);
@@ -182,7 +186,7 @@ public class EventServiceImpl implements EventService {
 
         Event newEvent = eventRepository.save(event);
         log.info("Create {}", newEvent);
-        return EventMapper.INSTANCE.toEventFullDto(newEvent);
+        return eventMapper.toEventFullDto(newEvent);
     }
 
     @Override
@@ -195,7 +199,7 @@ public class EventServiceImpl implements EventService {
                 new EventNotFoundException(EventNotFoundException.createMessage(eventId)));
 
         log.info("Get {}", event);
-        return EventMapper.INSTANCE.toEventFullDto(event);
+        return eventMapper.toEventFullDto(event);
     }
 
     @Override
@@ -213,7 +217,7 @@ public class EventServiceImpl implements EventService {
             throw new EventStatusToEditException("Only pending events can be changed");
         }
         log.info("Event id={} canceled", event.getId());
-        return EventMapper.INSTANCE.toEventFullDto(event);
+        return eventMapper.toEventFullDto(event);
     }
 
     @Override
@@ -225,7 +229,7 @@ public class EventServiceImpl implements EventService {
         List<Request> requests = requestRepository.findAllByEventId(eventId);
 
         log.info("Get all requests on eventId={} ", eventId);
-        return requests.stream().map(RequestMapper.INSTANCE::toParticipationRequestDto).collect(Collectors.toList());
+        return requests.stream().map(requestMapper::toParticipationRequestDto).collect(Collectors.toList());
     }
 
     @Override
@@ -266,7 +270,7 @@ public class EventServiceImpl implements EventService {
                 }
             }
         }
-        return RequestMapper.INSTANCE.toParticipationRequestDto(confirmedRequest);
+        return requestMapper.toParticipationRequestDto(confirmedRequest);
     }
 
     @Override
@@ -288,7 +292,7 @@ public class EventServiceImpl implements EventService {
         request.setStatus(RequestState.REJECTED);
         Request rejectRequest = requestRepository.save(request);
         log.info("Request with id={} rejected", request.getId());
-        return RequestMapper.INSTANCE.toParticipationRequestDto(rejectRequest);
+        return requestMapper.toParticipationRequestDto(rejectRequest);
     }
 
     @Override
@@ -313,7 +317,7 @@ public class EventServiceImpl implements EventService {
                     rangeStart, rangeEnd, pageRequest).toList();
             log.info("Get all events to admin {}", events);
 
-            return events.stream().map(EventMapper.INSTANCE::toEventFullDto).collect(Collectors.toList());
+            return events.stream().map(eventMapper::toEventFullDto).collect(Collectors.toList());
         } catch (DateTimeParseException e) {
             throw new DataTimeFormatException("Format rangeStart: " + start + " and rangeEnd: " + end + " not validate");
         }
@@ -322,7 +326,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto put(Long eventId, AdminUpdateEventRequest adminUpdateEventRequest)
             throws EventNotFoundException, EventDataConstraintException {
-        Event toUpdateEvent = EventMapper.INSTANCE.toEvent(adminUpdateEventRequest);
+        Event toUpdateEvent = eventMapper.toEvent(adminUpdateEventRequest);
 
         Event event = eventRepository.findById(eventId).orElseThrow(
                 () -> new EventNotFoundException(EventNotFoundException.createMessage(eventId)));
@@ -334,7 +338,7 @@ public class EventServiceImpl implements EventService {
         try {
             Event adminUpdateEvent = eventRepository.save(event);
             log.info("Admin update {}", adminUpdateEvent);
-            return EventMapper.INSTANCE.toEventFullDto(adminUpdateEvent);
+            return eventMapper.toEventFullDto(adminUpdateEvent);
         } catch (DataIntegrityViolationException e) {
             throw new EventDataConstraintException(e.getMessage());
         }
@@ -369,7 +373,7 @@ public class EventServiceImpl implements EventService {
         event.setState(EventState.PUBLISHED);
         Event publishedEvent = eventRepository.save(event);
         log.info("Published {}", publishedEvent);
-        return EventMapper.INSTANCE.toEventFullDto(publishedEvent);
+        return eventMapper.toEventFullDto(publishedEvent);
     }
 
     @Override
@@ -384,7 +388,7 @@ public class EventServiceImpl implements EventService {
         event.setState(EventState.CANCELED);
         Event canceledEvent = eventRepository.save(event);
         log.info("Canceled {}", canceledEvent);
-        return EventMapper.INSTANCE.toEventFullDto(canceledEvent);
+        return eventMapper.toEventFullDto(canceledEvent);
     }
 
 

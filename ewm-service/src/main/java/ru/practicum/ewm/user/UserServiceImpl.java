@@ -21,10 +21,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final UserMapper userMapper;
+
     @Override
     public UserDto create(NewUserRequest userRequest) throws UserEmailNotUniqueException {
         try {
-            UserDto userDto = UserMapper.INSTANCE.toUserDto(userRepository.save(UserMapper.INSTANCE.toUser(userRequest)));
+            UserDto userDto = userMapper.toUserDto(userRepository.save(userMapper.toUser(userRequest)));
             log.info("Create " + userDto);
             return userDto;
         } catch (DataIntegrityViolationException e) {
@@ -36,7 +38,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getAll(List<Long> ids, int from, int size) {
         PageRequest pageRequest = PageRequest.of(from, size);
         List<UserDto> list = userRepository.getAllByIds(ids, pageRequest)
-                .stream().map(UserMapper.INSTANCE::toUserDto)
+                .stream().map(userMapper::toUserDto)
                 .collect(Collectors.toList());
         log.info("Get users page= {}, size= {}", from, size);
         return list;

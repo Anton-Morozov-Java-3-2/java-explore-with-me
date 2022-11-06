@@ -2,12 +2,10 @@ package ru.practicum.ewm.event;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 import ru.practicum.ewm.event.dto.*;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface EventMapper {
-    EventMapper INSTANCE = Mappers.getMapper(EventMapper.class);
 
     @Mapping(target = "category.id", source = "category")
     @Mapping(target = "locationLon", source = "location.lon")

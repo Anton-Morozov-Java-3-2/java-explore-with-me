@@ -37,7 +37,9 @@ class RequestServiceTest {
     @Mock
     EventRepository eventRepository;
 
-    RequestService requestService;
+    private RequestService requestService;
+
+    private final RequestMapper requestMapper = new RequestMapperImpl();
 
     private MockitoSession session;
 
@@ -92,9 +94,9 @@ class RequestServiceTest {
     void setUp() {
         session = Mockito.mockitoSession().initMocks(this).startMocking();
         event = getEvent();
-        requestService = new RequestServiceImpl(requestRepository, userRepository, eventRepository);
+        requestService = new RequestServiceImpl(requestRepository, userRepository, eventRepository, requestMapper);
         request = getRequest();
-        requestDto = RequestMapper.INSTANCE.toParticipationRequestDto(request);
+        requestDto = requestMapper.toParticipationRequestDto(request);
     }
 
     @AfterEach

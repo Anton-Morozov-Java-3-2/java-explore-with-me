@@ -1,6 +1,7 @@
 package ru.practicum.ewm.request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(PrivateRequestController.class)
 @AutoConfigureMockMvc
+@RequiredArgsConstructor
 class PrivateRequestControllerTest {
 
     @MockBean
     private RequestServiceImpl requestService;
+
+    private final RequestMapper requestMapper = new RequestMapperImpl();
 
     @Autowired
     private final ObjectMapper mapper = new ObjectMapper();
@@ -90,7 +94,7 @@ class PrivateRequestControllerTest {
     @BeforeEach
     void setUp() {
         request = getRequest();
-        requestDto = RequestMapper.INSTANCE.toParticipationRequestDto(request);
+        requestDto = requestMapper.toParticipationRequestDto(request);
     }
 
     @Test

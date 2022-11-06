@@ -14,10 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import ru.practicum.ewm.category.Category;
 import ru.practicum.ewm.compilation.dto.CompilationDto;
 import ru.practicum.ewm.compilation.dto.NewCompilationDto;
-import ru.practicum.ewm.event.Event;
-import ru.practicum.ewm.event.EventMapper;
-import ru.practicum.ewm.event.EventRepository;
-import ru.practicum.ewm.event.EventState;
+import ru.practicum.ewm.event.*;
 import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.exception.CompilationNotFoundException;
 import ru.practicum.ewm.exception.DuplicateEventException;
@@ -41,6 +38,10 @@ class CompilationServiceTest {
     CompilationRepository compilationRepository;
 
     CompilationService compilationService;
+
+    CompilationMapper compilationMapper = new CompilationMapperImpl();
+
+    EventMapper eventMapper = new EventMapperImpl();
 
     private MockitoSession session;
 
@@ -91,9 +92,9 @@ class CompilationServiceTest {
     void setUp() {
         session = Mockito.mockitoSession().initMocks(this).startMocking();
         event = getEvent();
-        compilationService = new CompilationServiceImpl(compilationRepository, eventRepository);
+        compilationService = new CompilationServiceImpl(compilationRepository, eventRepository, compilationMapper);
         compilation = new Compilation(1L, Set.of(event), true, "Мюзиклы");
-        eventShortDtoSet = Set.of(EventMapper.INSTANCE.toEventShortDto(event));
+        eventShortDtoSet = Set.of(eventMapper.toEventShortDto(event));
         compilationDto = new CompilationDto(eventShortDtoSet, 1L, true, "Мюзиклы");
         newCompilationDto = new NewCompilationDto(Set.of(1L), true, "Мюзиклы");
     }

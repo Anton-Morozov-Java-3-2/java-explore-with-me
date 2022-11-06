@@ -26,6 +26,8 @@ class UserServiceTest {
 
     UserService userService;
 
+    UserMapper userMapper = new UserMapperImpl();
+
     @Mock
     UserRepository userRepository;
 
@@ -40,9 +42,9 @@ class UserServiceTest {
     @BeforeEach
     void setUp() {
         session = Mockito.mockitoSession().initMocks(this).startMocking();
-        userService = new UserServiceImpl(userRepository);
+        userService = new UserServiceImpl(userRepository, userMapper);
         user = new User(1L, "user@email.ru", "Виктор Комаров");
-        userDto = UserMapper.INSTANCE.toUserDto(user);
+        userDto = userMapper.toUserDto(user);
         userRequest = new NewUserRequest("Виктор Комаров", "user@email.ru");
     }
 

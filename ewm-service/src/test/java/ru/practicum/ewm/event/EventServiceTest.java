@@ -16,9 +16,7 @@ import ru.practicum.ewm.event.dto.AdminUpdateEventRequest;
 import ru.practicum.ewm.event.dto.Location;
 import ru.practicum.ewm.event.dto.UpdateEventRequest;
 import ru.practicum.ewm.exception.*;
-import ru.practicum.ewm.request.Request;
-import ru.practicum.ewm.request.RequestRepository;
-import ru.practicum.ewm.request.RequestState;
+import ru.practicum.ewm.request.*;
 import ru.practicum.ewm.user.User;
 import ru.practicum.ewm.user.UserRepository;
 
@@ -41,9 +39,13 @@ class EventServiceTest {
     @Mock
     CategoryRepository categoryRepository;
 
+    private final EventMapper eventMapper = new EventMapperImpl();
+
+    private final RequestMapper requestMapper = new RequestMapperImpl();
+
     private MockitoSession session;
 
-    EventService eventService;
+    private  EventService eventService;
 
     private static Event event;
 
@@ -141,12 +143,11 @@ class EventServiceTest {
         return request;
     }
 
-
-
     @BeforeEach
     void setUp() {
         session = Mockito.mockitoSession().initMocks(this).startMocking();
-        eventService = new EventServiceImpl(eventRepository, userRepository, categoryRepository, requestRepository);
+        eventService = new EventServiceImpl(eventRepository, userRepository, categoryRepository, requestRepository,
+                eventMapper, requestMapper);
         event = getEvent();
         request = getRequest();
         updateEventRequest = getUpdateEventRequest();
@@ -239,22 +240,6 @@ class EventServiceTest {
     }
 
     @Test
-    void create() {
-    }
-
-    @Test
-    void getByEventId() {
-    }
-
-    @Test
-    void updateToCancel() {
-    }
-
-    @Test
-    void getByUserIdEventId() {
-    }
-
-    @Test
     void confirmRequestRequestConfirmationNotValidException() {
         event.setRequestModeration(false);
         Mockito.when(userRepository.existsById(Mockito.any(Long.class))).thenReturn(true);
@@ -278,14 +263,6 @@ class EventServiceTest {
 
         Assertions.assertThrows(RequestNotFoundException.class,
                 () -> eventService.confirmRequest(1L, 1L, 1L));
-    }
-
-    @Test
-    void rejectRequest() {
-    }
-
-    @Test
-    void testGetAll() {
     }
 
     @Test

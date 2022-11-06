@@ -9,7 +9,6 @@ import ru.practicum.ewm.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Table(name = "participation_requests")
@@ -46,22 +45,5 @@ public class Request {
                 ", create=" + created +
                 ", status='" + status + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Request request = (Request) o;
-        return id.equals(request.id)
-                && requester.equals(request.requester)
-                && event.equals(request.event)
-                && created.equals(request.created)
-                && status.equals(request.status);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, requester, event, created, status);
     }
 }

@@ -10,11 +10,6 @@ import lombok.NoArgsConstructor;
 public class Location {
     private double lat;
     private double lon;
-
-    public Location(Integer lat, Integer lon) {
-        this.lat = lat.doubleValue();
-        this.lon = lon.doubleValue();
-    }
 }
 
 

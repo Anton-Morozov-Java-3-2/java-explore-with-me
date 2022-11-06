@@ -10,7 +10,6 @@ import ru.practicum.ewm.user.User;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
 @Entity
 @Table(name = "events")
@@ -96,33 +95,5 @@ public class Event {
                 ", state='" + state + '\'' +
                 ", views=" + views +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
-        return id.equals(event.id)
-                && confirmedRequests.equals(event.confirmedRequests)
-                && paid == event.paid && participantLimit.equals(event.participantLimit)
-                && requestModeration == event.requestModeration
-                && views == event.views
-                && annotation.equals(event.annotation)
-                && category.equals(event.category)
-                && createdOn.equals(event.createdOn)
-                && description.equals(event.description)
-                && eventDate.equals(event.eventDate)
-                && initiator.equals(event.initiator)
-                && publishedOn.equals(event.publishedOn)
-                && title.equals(event.title)
-                && state.equals(event.state);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, annotation, category, confirmedRequests, createdOn, description,
-                eventDate, initiator, paid, participantLimit, publishedOn,
-                requestModeration, title, state, views);
     }
 }

@@ -1,6 +1,6 @@
 package ru.practicum.ewm.compilation;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import ru.practicum.ewm.category.Category;
 import ru.practicum.ewm.compilation.dto.CompilationDto;
 import ru.practicum.ewm.event.Event;
 import ru.practicum.ewm.event.EventMapper;
+import ru.practicum.ewm.event.EventMapperImpl;
 import ru.practicum.ewm.event.EventState;
 import ru.practicum.ewm.event.dto.EventShortDto;
 import ru.practicum.ewm.user.User;
@@ -33,12 +34,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(PublicCompilationController.class)
 @AutoConfigureMockMvc
+@RequiredArgsConstructor
 class PublicCompilationControllerTest {
 
     @MockBean
     private CompilationServiceImpl compilationService;
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final EventMapper eventMapper = new EventMapperImpl();
 
     private CompilationDto compilationDto;
 
@@ -80,7 +82,7 @@ class PublicCompilationControllerTest {
 
     @BeforeEach
     void setUp() {
-        eventShortDtoSet = Set.of(EventMapper.INSTANCE.toEventShortDto(getEvent()));
+        eventShortDtoSet = Set.of(eventMapper.toEventShortDto(getEvent()));
         compilationDto = new CompilationDto(eventShortDtoSet, 1L, true, "Мюзиклы");
     }
 

@@ -26,12 +26,14 @@ public class RequestServiceImpl implements RequestService {
 
     private final EventRepository eventRepository;
 
+    private final RequestMapper requestMapper;
+
     @Override
     public List<ParticipationRequestDto> getAllByUserId(Long userId) throws UserNotFoundException {
         checkExistsUser(userId);
         List<Request> requests = requestRepository.findAllByRequesterId(userId);
         log.info("Get all request by user id={}", userId);
-        return requests.stream().map(RequestMapper.INSTANCE::toParticipationRequestDto).collect(Collectors.toList());
+        return requests.stream().map(requestMapper::toParticipationRequestDto).collect(Collectors.toList());
     }
 
     @Override
@@ -80,7 +82,7 @@ public class RequestServiceImpl implements RequestService {
 
         Request createdRequest = requestRepository.save(request);
         log.info("Create " + request);
-        return RequestMapper.INSTANCE.toParticipationRequestDto(createdRequest);
+        return requestMapper.toParticipationRequestDto(createdRequest);
     }
 
     @Override
@@ -106,7 +108,7 @@ public class RequestServiceImpl implements RequestService {
         request.setStatus(RequestState.CANCELED);
         Request cancelRequest = requestRepository.save(request);
         log.info("Cancel {}", request);
-        return RequestMapper.INSTANCE.toParticipationRequestDto(cancelRequest);
+        return requestMapper.toParticipationRequestDto(cancelRequest);
     }
 
     private void checkExistsUser(Long userId) throws UserNotFoundException {

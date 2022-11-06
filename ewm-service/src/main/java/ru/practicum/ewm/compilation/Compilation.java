@@ -43,18 +43,4 @@ public class Compilation {
                 ", title='" + title + '\'' +
                 '}';
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Compilation that = (Compilation) o;
-        return id.equals(that.id) && events.equals(that.events)
-                && pinned == that.pinned && title.equals(that.title);
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode() + events.hashCode() + pinned.hashCode() + title.hashCode();
-    }
 }

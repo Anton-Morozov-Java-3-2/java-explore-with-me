@@ -36,6 +36,8 @@ class AdminEventControllerTest {
     @MockBean
     private EventServiceImpl eventService;
 
+    private final EventMapper eventMapper = new EventMapperImpl();
+
     @Autowired
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -103,7 +105,7 @@ class AdminEventControllerTest {
 
     @BeforeEach
     void setUp() {
-        eventFullDto = EventMapper.INSTANCE.toEventFullDto(getEvent());
+        eventFullDto = eventMapper.toEventFullDto(getEvent());
         adminUpdateEventRequest = getAdminUpdateEventRequest();
     }
 

@@ -1,13 +1,11 @@
 package ru.practicum.ewm.category;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 import ru.practicum.ewm.category.dto.CategoryDto;
 import ru.practicum.ewm.category.dto.NewCategoryDto;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CategoryMapper {
-    CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 
     Category toCategory(NewCategoryDto newCategoryDto);
 
