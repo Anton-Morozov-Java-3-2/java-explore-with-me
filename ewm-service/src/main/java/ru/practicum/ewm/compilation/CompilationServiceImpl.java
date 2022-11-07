@@ -53,12 +53,13 @@ public class CompilationServiceImpl implements CompilationService {
         if (compilation.getPinned() == null)
             compilation.setPinned(false);
         Set<Long> eventIds = compilation.getEvents().stream().map(Event::getId).collect(Collectors.toSet());
-        Set<Event> events = new HashSet<>();
+        Set<Event> events = eventRepository.adminFindByIds(eventIds);
 
+        if (events.size() != eventIds.size()) {
 
-        for (Long e : eventIds) {
-            events.add(eventRepository.findById(e).orElseThrow(() -> new EventNotFoundException(EventNotFoundException
-                    .createMessage(e))));
+            eventIds.removeAll(
+            events.stream().map(Event::getId).collect(Collectors.toSet()));
+                    throw new EventNotFoundException("Not found events ids= " + eventIds);
         }
 
         compilation.setEvents(events);

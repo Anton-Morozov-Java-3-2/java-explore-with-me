@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
     Page<Event> findAllByInitiatorId(Long userId, Pageable pageable);
@@ -77,4 +78,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                       @Param("startRange") LocalDateTime start,
                                       @Param("endRange") LocalDateTime end,
                                       Pageable pageable);
+
+    @Query("select e from Event e where :userIds is null or e.initiator.id in (:userIds)")
+    Set<Event> adminFindByIds(@Param("userIds") Set<Long> users);
 }

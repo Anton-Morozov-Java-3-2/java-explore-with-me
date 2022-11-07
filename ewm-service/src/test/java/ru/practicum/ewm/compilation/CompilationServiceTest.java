@@ -133,8 +133,8 @@ class CompilationServiceTest {
         Mockito.when(compilationRepository.save(Mockito.any(Compilation.class)))
                 .thenReturn(compilation);
 
-        Mockito.when(eventRepository.findById(Mockito.any(Long.class)))
-                .thenReturn(Optional.of(event));
+        Mockito.when(eventRepository.adminFindByIds(Mockito.any(Set.class)))
+                .thenReturn(Set.of(event));
 
         Assertions.assertEquals(compilationDto,
                 compilationService.create(newCompilationDto));
