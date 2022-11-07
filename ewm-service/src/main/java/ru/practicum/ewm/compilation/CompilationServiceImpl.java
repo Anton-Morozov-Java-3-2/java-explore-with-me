@@ -13,7 +13,6 @@ import ru.practicum.ewm.exception.CompilationNotFoundException;
 import ru.practicum.ewm.exception.DuplicateEventException;
 import ru.practicum.ewm.exception.EventNotFoundException;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
