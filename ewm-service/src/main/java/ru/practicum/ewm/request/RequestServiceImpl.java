@@ -52,7 +52,7 @@ public class RequestServiceImpl implements RequestService {
                             userId, eventId));
         }
 
-        if (!requestRepository.findAllByEventIdAndRequesterId(eventId, userId).isEmpty()) {
+        if (requestRepository.findByEventIdAndRequesterId(eventId, userId).isPresent()) {
             throw new DuplicateRequestException(
                     String.format("User with id=%d already created request for event with id=%d",
                             userId, eventId));
@@ -74,7 +74,7 @@ public class RequestServiceImpl implements RequestService {
 
         if (event.getRequestModeration()) {
             request.setStatus(RequestState.PENDING);
-        } else if (event.getParticipantLimit() > 0 && event.getParticipantLimit() > event.getConfirmedRequests()) {
+        } else {
             request.setStatus(RequestState.CONFIRMED);
             event.setConfirmedRequests(event.getConfirmedRequests() + 1L);
             eventRepository.save(event);

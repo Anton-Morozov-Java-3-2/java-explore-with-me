@@ -29,4 +29,6 @@ public class EventFullDto {
     EventState state;
     String title;
     Long views;
+    Long likes;
+    Long dislikes;
 }

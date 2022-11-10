@@ -6,6 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.ewm.category.Category;
 import ru.practicum.ewm.category.CategoryRepository;
 import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.exception.*;
@@ -168,7 +169,10 @@ public class EventServiceImpl implements EventService {
         User initiator = userRepository.findById(userId).orElseThrow(()
                 -> new UserNotFoundException(UserNotFoundException.createMessage(userId)));
 
-        checkExistCategory(newEventDto.getCategory());
+        Category category = categoryRepository.findById(newEventDto.getCategory()).orElseThrow(() ->
+                new CategoryNotFoundException(CategoryNotFoundException.createMessage(newEventDto.getCategory())));
+
+
         checkEventDate(newEventDto.getEventDate());
 
         setDefaultParametersNewEventDto(newEventDto);
@@ -176,6 +180,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventMapper.toEvent(newEventDto);
 
         event.setInitiator(initiator);
+        event.setCategory(category);
         event.setConfirmedRequests(0L);
         event.setCreatedOn(LocalDateTime.now());
         event.setState(EventState.PENDING);
@@ -346,7 +351,7 @@ public class EventServiceImpl implements EventService {
 
     private void updateFields(Event toUpdateEvent, Event event) {
         if (toUpdateEvent.getAnnotation() != null) event.setAnnotation(toUpdateEvent.getAnnotation());
-        if (toUpdateEvent.getCategory() != null) event.setCategory(toUpdateEvent.getCategory());
+        if (toUpdateEvent.getCategory().getId() != null) event.setCategory(toUpdateEvent.getCategory());
         if (toUpdateEvent.getDescription() != null) event.setDescription(toUpdateEvent.getDescription());
         if (toUpdateEvent.getEventDate() != null) event.setEventDate(toUpdateEvent.getEventDate());
         if (toUpdateEvent.getPaid() != null) event.setPaid(toUpdateEvent.getPaid());

@@ -5,11 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.practicum.ewm.category.Category;
+import ru.practicum.ewm.reaction.Reaction;
 import ru.practicum.ewm.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "events")
@@ -73,15 +76,19 @@ public class Event {
     @Column(name = "views", nullable = false)
     private long views;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "event_id")
+    private List<Reaction> reactions = new ArrayList<>();
+
     @Override
     public String toString() {
         return "Event{" +
                 "id=" + id +
                 ", annotation='" + annotation + '\'' +
-                ", category=" + category +
+                category +
                 ", confirmedCount=" + confirmedRequests +
                 ", createdOn=" + createdOn.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) +
-                ", description='" + description.substring(0, 52) + '\'' +
+                ", description='" + description.substring(0, Math.min(description.length(), 52)) + '\'' +
                 ", eventData=" + eventDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) +
                 ", initiator=" + initiator +
                 ", locationLat=" + locationLat +

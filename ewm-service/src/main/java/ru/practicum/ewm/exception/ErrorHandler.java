@@ -20,7 +20,8 @@ public class ErrorHandler {
 
     @ExceptionHandler({DuplicateRequestException.class, UserAccessException.class,
             RequestConfirmationNotValidException.class, EventStatusToPublishException.class,
-            EventStatusToViewException.class,EventStatusToViewException.class})
+            EventStatusToViewException.class,EventStatusToViewException.class, ReactionAlreadyExistException.class,
+            ReactionNotAvailableException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ApiError handleForbidden(final Exception e) {
         String reason = "For the requested operation the conditions are not met.";
@@ -28,7 +29,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler({UserNotFoundException.class, CategoryNotFoundException.class, EventNotFoundException.class,
-            RequestNotFoundException.class, CompilationNotFoundException.class})
+            RequestNotFoundException.class, CompilationNotFoundException.class, ReactionNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handleNotFoundRequest(final Exception e) {
         String reason = "The required object was not found.";
