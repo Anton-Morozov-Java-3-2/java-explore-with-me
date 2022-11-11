@@ -16,11 +16,11 @@ public class AdminEventController {
     private final EventService eventService;
 
     @GetMapping
-    public List<EventFullDto> getAll(@RequestParam(name = "users") List<Long> users,
-                                      @RequestParam(name = "states") List<EventState> states,
-                                      @RequestParam(name = "categories") List<Long> categorise,
-                                      @RequestParam(name = "rangeStart") String rangeStart,
-                                      @RequestParam(name = "rangeEnd") String rangeEnd,
+    public List<EventFullDto> getAll(@RequestParam(name = "users", required = false) List<Long> users,
+                                      @RequestParam(name = "states", required = false) List<EventState> states,
+                                      @RequestParam(name = "categories", required = false) List<Long> categorise,
+                                      @RequestParam(name = "rangeStart", required = false) String rangeStart,
+                                      @RequestParam(name = "rangeEnd", required = false) String rangeEnd,
                                       @RequestParam(name = "from", defaultValue = "0") Integer from,
                                       @RequestParam(name = "size", defaultValue = "10") Integer size)
             throws DataTimeFormatException {

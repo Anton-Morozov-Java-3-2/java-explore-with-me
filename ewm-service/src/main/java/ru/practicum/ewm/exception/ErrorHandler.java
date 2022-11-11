@@ -1,17 +1,21 @@
 package ru.practicum.ewm.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
+@Slf4j
 public class ErrorHandler {
 
     @ExceptionHandler({EventDateNotValidException.class, EventStatusToEditException.class,
             MethodArgumentNotValidException.class, DataTimeFormatException.class,
-            EventPublishDateNotValidException.class, DuplicateEventException.class})
+            EventPublishDateNotValidException.class, DuplicateEventException.class, MethodArgumentNotValidException.class,
+            MissingServletRequestParameterException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleBadRequest(final Exception e) {
         String reason = "For the requested operation the conditions are not met";
@@ -48,6 +52,8 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiError handleInternalServerError(final Exception e) {
         String reason = "Error occurred";
+        e.printStackTrace();
+        log.info(e.getClass().getName());
         return new ApiError(e.getMessage(), reason, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

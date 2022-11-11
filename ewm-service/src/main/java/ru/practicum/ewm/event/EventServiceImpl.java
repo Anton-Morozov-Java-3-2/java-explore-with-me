@@ -308,11 +308,18 @@ public class EventServiceImpl implements EventService {
                                      String end,
                                      Integer from, Integer size) throws DataTimeFormatException {
 
+        LocalDateTime now = LocalDateTime.now().withNano(0);
+
         try {
-            LocalDateTime rangeStart = (start == null ? LocalDateTime.MIN : LocalDateTime.parse(URLDecoder.decode(start,
-                    StandardCharsets.UTF_8), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            LocalDateTime rangeEnd = (end == null ? LocalDateTime.MAX : LocalDateTime.parse(URLDecoder.decode(end,
-                    StandardCharsets.UTF_8), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+            LocalDateTime rangeStart = (start == null
+                    ? now : LocalDateTime.parse(URLDecoder.decode(start, StandardCharsets.UTF_8),
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            LocalDateTime rangeEnd = (end == null
+                    ? (start == null ? now : ZERO_DATE)
+                    : LocalDateTime.parse(URLDecoder.decode(end, StandardCharsets.UTF_8),
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
 
             PageRequest pageRequest = PageRequest.of(from, size);
             log.info("Admin request all events by param users={} states={} categorise={} start={} end={} from={} size={}",
