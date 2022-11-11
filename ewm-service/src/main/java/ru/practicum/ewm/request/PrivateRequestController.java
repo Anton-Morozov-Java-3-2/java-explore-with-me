@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.exception.*;
 import ru.practicum.ewm.request.dto.ParticipationRequestDto;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
