@@ -7,7 +7,7 @@ import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.reaction.Reaction;
 import ru.practicum.ewm.reaction.TypeReaction;
 
-import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface EventMapper {
@@ -37,12 +37,12 @@ public interface EventMapper {
     EventShortDto toEventShortDto(Event event);
 
     @Named("reactionsToLikes")
-    default Long reactionsToLike(List<Reaction> reactions) {
+    default Long reactionsToLike(Set<Reaction> reactions) {
         return reactions.stream().filter(reaction -> reaction.getReaction().equals(TypeReaction.LIKE)).count();
     }
 
     @Named("reactionsToDislikes")
-    default Long reactionsToDislike(List<Reaction> reactions) {
+    default Long reactionsToDislike(Set<Reaction> reactions) {
         return reactions.stream().filter(reaction -> reaction.getReaction().equals(TypeReaction.DISLIKE)).count();
     }
 }

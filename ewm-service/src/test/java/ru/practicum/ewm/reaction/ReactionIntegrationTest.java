@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.category.CategoryService;
 import ru.practicum.ewm.category.dto.CategoryDto;
 import ru.practicum.ewm.category.dto.NewCategoryDto;
+import ru.practicum.ewm.event.Event;
+import ru.practicum.ewm.event.EventRepository;
 import ru.practicum.ewm.event.EventService;
 import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.exception.*;
@@ -40,6 +42,8 @@ public class ReactionIntegrationTest {
 
     private final ReactionService reactionService;
 
+    private final EventRepository eventRepository;
+
     @Test
     void simpleTest() throws UserEmailNotUniqueException, UserNotFoundException, EventDateNotValidException,
             CategoryNotFoundException, CategoryNameNotUniqueException, EventNotFoundException, ParticipantLimitExceedException,
@@ -69,6 +73,8 @@ public class ReactionIntegrationTest {
         ReactionDto reactionDto = reactionService.create(user.getId(), eventFullDto.getId(), TypeReaction.LIKE);
 
         List<EventShortDto> eventShortDtoList = reactionService.getRatingEvents(TypeReaction.LIKE, 0, 10);
+
+        Event event2 = eventRepository.findById(1L).get();
 
         Assertions.assertEquals(1, eventShortDtoList.size());
         Assertions.assertEquals(eventFullDto.getId(), eventShortDtoList.get(0).getId());

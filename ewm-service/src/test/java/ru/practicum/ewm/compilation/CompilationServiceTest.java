@@ -23,10 +23,7 @@ import ru.practicum.ewm.user.User;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Transactional
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -85,7 +82,7 @@ class CompilationServiceTest {
         event.setTitle("Мюзикл");
         event.setState(EventState.PENDING);
         event.setViews(0L);
-        event.setReactions(new ArrayList<>());
+        event.setReactions(new HashSet<>());
         return event;
     }
 

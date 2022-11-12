@@ -7,7 +7,7 @@ import ru.practicum.ewm.compilation.dto.NewCompilationDto;
 import ru.practicum.ewm.event.Event;
 import ru.practicum.ewm.event.EventMapper;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = {EventMapper.class})
@@ -22,7 +22,7 @@ public interface CompilationMapper {
     default Event map(Long value) {
         Event event = new Event();
         event.setId(value);
-        event.setReactions(new ArrayList<>());
+        event.setReactions(new HashSet<>());
         return event;
     }
 }

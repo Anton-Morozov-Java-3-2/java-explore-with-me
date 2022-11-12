@@ -11,7 +11,7 @@ public interface ReactionService {
 
     ReactionDto create(Long userId, Long eventId, TypeReaction reaction) throws UserNotFoundException, EventNotFoundException, ReactionAlreadyExistException, ReactionNotAvailableException;
 
-    ReactionDto update(Long userId, Long eventId, TypeReaction reaction) throws ReactionNotFoundException;
+    ReactionDto update(Long userId, Long eventId, TypeReaction reaction) throws ReactionNotFoundException, DuplicateReactionException;
 
     void delete(Long userId, Long eventId) throws ReactionNotFoundException;
 

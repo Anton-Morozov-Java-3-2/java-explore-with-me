@@ -36,8 +36,8 @@ public class Reaction {
     public String toString() {
         return "Reaction{" +
                 "id=" + id +
-                ", event=" + event.getId() +
-                ", user=" + user.getName() +
+                ", event {id: " + event.getId() + ", annotation: " + event.getAnnotation() + "}" +
+                ", user {id: " + user.getId() + "name: " + user.getEmail() + "}" +
                 ", rate=" + reaction.name() +
                 '}';
     }

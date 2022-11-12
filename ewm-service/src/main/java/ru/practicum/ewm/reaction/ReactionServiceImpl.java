@@ -79,12 +79,18 @@ public class ReactionServiceImpl implements ReactionService {
     }
 
     @Override
-    public ReactionDto update(Long userId, Long eventId, TypeReaction newReaction) throws ReactionNotFoundException {
+    public ReactionDto update(Long userId, Long eventId, TypeReaction newReaction) throws ReactionNotFoundException,
+            DuplicateReactionException {
         Optional<Reaction> optionalReaction = reactionRepository.findByEventIdAndUserId(eventId, userId);
         if (optionalReaction.isEmpty()) {
             throw new ReactionNotFoundException(ReactionNotFoundException.createMessage(userId, eventId));
         }
         Reaction reaction = optionalReaction.get();
+
+        if (reaction.getReaction().equals(newReaction)) {
+            throw new DuplicateReactionException(newReaction.name());
+        }
+
         reaction.setReaction(newReaction);
         ReactionDto reactionDto = reactionMapper.toDto(reactionRepository.save(reaction));
         log.info("Update {}", reactionDto);

@@ -23,7 +23,8 @@ public class PrivateReactionController {
     @PatchMapping
     ReactionDto update(@PathVariable(name = "eventId") Long eventId,
                        @PathVariable(name = "userId") Long userId,
-                       @RequestParam(name = "reaction") TypeReaction reaction) throws ReactionNotFoundException {
+                       @RequestParam(name = "reaction") TypeReaction reaction) throws ReactionNotFoundException,
+            DuplicateReactionException {
         return reactionService.update(userId, eventId, reaction);
     }
 

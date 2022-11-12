@@ -11,8 +11,8 @@ import ru.practicum.ewm.user.User;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "events")
@@ -78,7 +78,7 @@ public class Event {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "event_id")
-    private List<Reaction> reactions = new ArrayList<>();
+    private Set<Reaction> reactions = new HashSet<>();
 
     @Override
     public String toString() {
