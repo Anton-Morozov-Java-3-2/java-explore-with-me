@@ -23,9 +23,7 @@ import ru.practicum.ewm.user.User;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Transactional
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -39,9 +37,10 @@ class CompilationServiceTest {
 
     CompilationService compilationService;
 
-    CompilationMapper compilationMapper = new CompilationMapperImpl();
-
     EventMapper eventMapper = new EventMapperImpl();
+
+    CompilationMapper compilationMapper = new CompilationMapperImpl(eventMapper);
+
 
     private MockitoSession session;
 
@@ -83,7 +82,7 @@ class CompilationServiceTest {
         event.setTitle("Мюзикл");
         event.setState(EventState.PENDING);
         event.setViews(0L);
-
+        event.setReactions(new HashSet<>());
         return event;
     }
 

@@ -20,7 +20,6 @@ import ru.practicum.ewm.user.UserRepository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -129,8 +128,8 @@ class RequestServiceTest {
         Mockito.when(eventRepository.findById(Mockito.any(Long.class)))
                 .thenReturn(Optional.of(event));
 
-        Mockito.when(requestRepository.findAllByEventIdAndRequesterId(Mockito.any(Long.class), Mockito.any(Long.class)))
-                .thenReturn(new ArrayList<>());
+        Mockito.when(requestRepository.findByEventIdAndRequesterId(Mockito.any(Long.class), Mockito.any(Long.class)))
+                .thenReturn(Optional.empty());
 
         Mockito.when(requestRepository.save(Mockito.any(Request.class)))
                 .thenReturn(request);
@@ -152,8 +151,8 @@ class RequestServiceTest {
         Mockito.when(eventRepository.findById(Mockito.any(Long.class)))
                 .thenReturn(Optional.of(event));
 
-        Mockito.when(requestRepository.findAllByEventIdAndRequesterId(Mockito.any(Long.class), Mockito.any(Long.class)))
-                .thenReturn(List.of(request));
+        Mockito.when(requestRepository.findByEventIdAndRequesterId(Mockito.any(Long.class), Mockito.any(Long.class)))
+                .thenReturn(Optional.of(request));
 
         Assertions.assertThrows(DuplicateRequestException.class, () -> requestService.create(1L, 1L));
 
@@ -173,8 +172,8 @@ class RequestServiceTest {
         Mockito.when(eventRepository.findById(Mockito.any(Long.class)))
                 .thenReturn(Optional.of(event));
 
-        Mockito.when(requestRepository.findAllByEventIdAndRequesterId(Mockito.any(Long.class), Mockito.any(Long.class)))
-                .thenReturn(new ArrayList<>());
+        Mockito.when(requestRepository.findByEventIdAndRequesterId(Mockito.any(Long.class), Mockito.any(Long.class)))
+                .thenReturn(Optional.empty());
 
         Assertions.assertThrows(ParticipantLimitExceedException.class,
                 () -> requestService.create(1L, 1L));
